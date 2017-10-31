@@ -1,8 +1,14 @@
 # TaoDB
-Database for Event Sourcing accessible via gRPC.
-
+Database for Event Sourcing
 ## Features
-- 
+- Append only / Immutable
+- Ordered Events
+- Accessible via [gRPC](https://grpc.io)
+- Replication
+
+## Design
+To be continued
+
 
 ## Build
 ```
