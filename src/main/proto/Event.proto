@@ -1,0 +1,32 @@
+syntax = 'proto3';
+
+option java_package = "com.github.puddingspudding.taodb";
+option java_multiple_files = true;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+
+message Event {
+    EventId id = 1;
+    bytes data = 2;
+}
+
+message EventId {
+    string uuid = 1;
+    google.protobuf.Timestamp timestamp = 2;
+}
+
+service EventStoreService {
+
+    rpc add(Event) returns (google.protobuf.Empty);
+    rpc getById(EventId) returns (stream Event);
+    rpc getByTimestamp(google.protobuf.Timestamp) returns (stream Event);
+
+}
+
+service ReplicatedEventStoreService {
+    rpc getById(EventId) returns (stream Event);
+    rpc getByTimestamp(google.protobuf.Timestamp) returns (stream Event);
+}
