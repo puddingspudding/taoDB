@@ -21,7 +21,7 @@ import java.util.function.*;
 import java.util.function.Consumer;
 
 /**
- * Created by pudding on 31.10.17.
+ * IndexedProtobufFileStorage.
  */
 public class IndexedProtobufFileStorage implements Storage {
 
@@ -74,7 +74,7 @@ public class IndexedProtobufFileStorage implements Storage {
     }
 
     @Override
-    public void add(Event event, Consumer<Empty> onNext, Runnable onEnd, Consumer<Throwable> onError) {
+    public void add(Event event, Consumer<Event> onNext, Runnable onEnd, Consumer<Throwable> onError) {
         try {
             long pos = this.writeFileChannel.position();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -85,7 +85,7 @@ public class IndexedProtobufFileStorage implements Storage {
             );
             this.latestEvenId = event.getId();
             this.index.putIfAbsent(event.getId().getTimestamp().getSeconds(), pos);
-            onNext.accept(Empty.getDefaultInstance());
+            onNext.accept(event);
             onEnd.run();
         } catch (Exception e) {
             e.printStackTrace();

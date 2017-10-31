@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 /**
- * Created by pudding on 31.10.17.
+ * TaoReplicationService.
  */
 public class TaoReplicationService extends ReplicatedEventStoreServiceGrpc.ReplicatedEventStoreServiceImplBase {
 

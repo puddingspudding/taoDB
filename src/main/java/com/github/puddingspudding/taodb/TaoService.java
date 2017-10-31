@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * EventStoreServicew.
+ * TaoService.
  */
 public class TaoService extends EventStoreServiceGrpc.EventStoreServiceImplBase {
 
@@ -42,7 +42,7 @@ public class TaoService extends EventStoreServiceGrpc.EventStoreServiceImplBase 
 
 
     @Override
-    public void add(Event event, StreamObserver<Empty> responseObserver) {
+    public void add(Event event, StreamObserver<Event> responseObserver) {
         this.storage.add(event, responseObserver::onNext, responseObserver::onCompleted, responseObserver::onError);
 
     }

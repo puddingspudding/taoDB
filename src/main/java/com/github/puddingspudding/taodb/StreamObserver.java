@@ -3,7 +3,7 @@ package com.github.puddingspudding.taodb;
 import java.util.function.Consumer;
 
 /**
- * Just a helper for grpcs StreamObserver to enable lambdas. XOXO
+ * Just a helper for gRPC's StreamObserver to enable lambdas. XOXO
  */
 public class StreamObserver {
 

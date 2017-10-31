@@ -20,12 +20,16 @@ message EventId {
 
 service EventStoreService {
 
-    rpc add(Event) returns (google.protobuf.Empty);
+    rpc add(Event) returns (Event);
+
     rpc getById(EventId) returns (stream Event);
+
     rpc getByTimestamp(google.protobuf.Timestamp) returns (stream Event);
 
 }
 
+/* The ReplicatedEventStoreService provides the same interface as EventStoreService
+ * except for add() to ensure read-only access */
 service ReplicatedEventStoreService {
     rpc getById(EventId) returns (stream Event);
     rpc getByTimestamp(google.protobuf.Timestamp) returns (stream Event);

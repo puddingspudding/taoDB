@@ -1,13 +1,29 @@
-# TaoDB
-Database for Event Sourcing
+# [WIP] TaoDB
+Database for [Event Sourcing](https://www.google.de/search?q=event+sourcing)
 ## Features
 - Append only / Immutable
 - Ordered Events
-- Accessible via [gRPC](https://grpc.io)
+- Accessible via [gRPC](https://grpc.io). See  [TaoDB.proto](https://github.com/puddingspudding/taoDB/blob/master/src/main/proto/).
 - Replication
 
 ## Design
-To be continued
+In event sourcing, the requirements for the event store are to be append only and and able to provide all events since a specific timestamp or after a specfic event.
+
+### File
+TaoDB appends incomming events, protobuf encoded, at the end of a file.
+In order to find all events after a given event id or since a timestamp an index (map from timestamp to file position) is held. The index is updated every second.
+
+### Event
+An event consists of an Id and data (arbitrary bytes). The Id is a combination of timestamp and an [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier).
+
+### Replication
+...
+
+## ToDo
+- Deployment
+  - Start/Stop
+  - Configuration
+  - Error Logging
 
 
 ## Build

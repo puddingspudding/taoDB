@@ -10,11 +10,11 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
- * Created by pudding on 31.10.17.
+ * Storage.
  */
 interface Storage {
 
-    void add(Event event, Consumer<Empty> onNext, Runnable onEnd, Consumer<Throwable> onError);
+    void add(Event event, Consumer<Event> onNext, Runnable onEnd, Consumer<Throwable> onError);
 
     void get(EventId eventId, Consumer<Event> onNext, Runnable onEnd, Consumer<Throwable> onError);
 
