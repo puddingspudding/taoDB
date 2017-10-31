@@ -40,7 +40,6 @@ public class TaoService extends EventStoreServiceGrpc.EventStoreServiceImplBase 
         this.storage = new IndexedProtobufFileStorage(file);
     }
 
-
     @Override
     public void add(Event event, StreamObserver<Event> responseObserver) {
         this.storage.add(event, responseObserver::onNext, responseObserver::onCompleted, responseObserver::onError);

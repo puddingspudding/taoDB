@@ -5,8 +5,6 @@ option java_multiple_files = true;
 
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/empty.proto";
-
 
 message Event {
     EventId id = 1;
@@ -19,13 +17,9 @@ message EventId {
 }
 
 service EventStoreService {
-
     rpc add(Event) returns (Event);
-
     rpc getById(EventId) returns (stream Event);
-
     rpc getByTimestamp(google.protobuf.Timestamp) returns (stream Event);
-
 }
 
 /* The ReplicatedEventStoreService provides the same interface as EventStoreService

@@ -48,14 +48,12 @@ public class TaoReplicationService extends ReplicatedEventStoreServiceGrpc.Repli
     public TaoReplicationService(String host, int port, Path file) throws Exception {
         this.storage = new IndexedProtobufFileStorage(file);
 
-        this.stubFactory = () -> {
-            return EventStoreServiceGrpc.newBlockingStub(
-                ManagedChannelBuilder
-                    .forAddress(host, port)
-                    .usePlaintext(true)
-                    .build()
-            ).withWaitForReady();
-        };
+        this.stubFactory = () -> EventStoreServiceGrpc.newBlockingStub(
+            ManagedChannelBuilder
+                .forAddress(host, port)
+                .usePlaintext(true)
+                .build()
+        ).withWaitForReady();
         this.stub = stubFactory.get();
 
         Executors
