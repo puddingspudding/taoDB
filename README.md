@@ -35,8 +35,7 @@ An event consists of an Id and data (arbitrary bytes). The Id is a combination o
 $ taodb status
 ```
 
-![taodb status]
-(https://github.com/puddingspudding/taoDB/raw/master/docs/status.png)
+![status](https://github.com/puddingspudding/taoDB/raw/master/docs/status.png)
 
 ## Start/Stop
 ```
