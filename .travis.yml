@@ -19,3 +19,4 @@ deploy:
   file: "/home/travis/build/puddingspudding/taoDB/src/main/deb/taodb.deb"
   on:
     repo: puddingspudding/taoDB
+    tags: true
