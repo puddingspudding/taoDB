@@ -11,6 +11,7 @@ branches:
   - "/^debian\\/\\d/"
 deploy:
   provider: releases
+  overwrite: true
   api_key:
     secure: VNGIIzzenM9o5wyswuCM77D3sGOKJu5fxgTA8euFWlRY0veBretjdpWkH8sC7g/5+Y/WX8DDm6t28FZMC8S7UOxR6IyjwDp77f9TYWnMW6qiCHjjIjI1MI+7m1AzuDivzaZR7NnNr35D7T/61O2PGwBWdw8d32dHqpu2aYxKDuLWjb5F+gOu0VONdYhCG5TcMcNL/DAhmGAnVLOPKuXrD1vrxDHNbYzqYWa8GC1o9NEKphYn6J/M8vKlmHdjrMeqIt9MJV/SF28dBpZD0TpbN8UcENY6c1WGbTMVbGSSSwPzq+cMtDr43QfTCpZTJ2xdqq+QTsfbYOz67hgp+bMZewlpwe0btxuH+K0Kvn75IBai4At0CQT5iXXG+nKO4NOygkMUVswrFTHqqp/BXUxU0Va23vfCHRFnmFGxJjdCQenz5QZ5VjunnBtb6Kh2LMsPpJ6Gurk5SUEVkq8iKil3fd9OsiU97PgREVlA0QVYAKZNxbp5vWoG4fCrpZfYKP7D2EtUO040Yh0jr1T6cQA6DHzd/Wjgk9Iiq18blmfGjioR/jWbRvqO+hZl/4o7GxkamtBtVUCQDh0nBiBIOi8/mazb5T1kizbZn7zBFPBtANWctgzKoJcSrQaiPmB9w3mM0t/65l2iwjSv3mHjjR1118pvQD3+7bDmDF8JctPVmHs=
   file: "/home/travis/build/puddingspudding/taoDB/src/main/deb/taodb.deb"
