@@ -6,8 +6,11 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.file.*;
+import java.util.Optional;
 
 /**
  * TaoService.
@@ -18,6 +21,23 @@ public class TaoService extends EventStoreServiceGrpc.EventStoreServiceImplBase 
     public static void main(String[] args) throws Exception {
         int port = Integer.parseInt(System.getProperty("port"));
         String file = System.getProperty("file");
+        String name = Optional.ofNullable(System.getProperty("name")).orElse("default");
+        Path pidFile = Paths.get("/tmp/taodb-" + name + ".pid");
+        if (Files.exists(pidFile)) {
+            System.out.println("already running");
+            System.exit(1);
+        }
+        long pid = ProcessHandle.current().pid();
+        Files.write(pidFile, String.valueOf(pid).getBytes(), StandardOpenOption.CREATE_NEW);
+
+        Runtime runtime = Runtime.getRuntime();
+        runtime.addShutdownHook(new Thread(() -> {
+            try {
+                Files.delete(pidFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }));
 
         TaoService service = new TaoService(
             Paths.get(file)

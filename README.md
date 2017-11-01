@@ -1,10 +1,13 @@
-# TaoDB
+# [WIP] TaoDB
 Database for [Event Sourcing](https://www.google.de/search?q=event+sourcing)
 ## Features
 - Append only / Immutable
 - Ordered Events
 - Accessible via [gRPC](https://grpc.io). See [TaoDB.proto](https://github.com/puddingspudding/taoDB/blob/master/src/main/proto/).
 - Replication
+
+## Requirements
+- Java 9
 
 ## Design
 In event sourcing, the requirements for the event store are to be append only and and able to provide all events since a specific timestamp or after a specfic event.
@@ -19,30 +22,52 @@ An event consists of an Id and data (arbitrary bytes). The Id is a combination o
 
 ## ToDo
 - Deployment
-  - Start/Stop
-  - Configuration
+  - Package
+  - ~Start/Stop~
+  - Configuration (in progress)
   - Error Logging
 
+
+# Run
+
+```
+taodb status
+```
+![status][status]
+
+## Config
+```
+# Services
+taodb.services=service1,service2
+
+# Replication Services
+taodb.replication.services=service1repli,service2repli
+
+# Service 1
+service1.network.port=6666
+service1.storage.path=/var/lib/taodb/service1.db
+
+# Service 2
+service2.network.port=7777
+service2.storage.path=/var/lib/taodb/service2.db
+
+# Server 1 Replication
+service1repli.network.port=6667
+service1repli.storage.path=/var/lib/taodb/service1_repli.db
+service1repli.master.host=127.0.0.1
+service1repli.master.port=6666
+
+# Service 2 Replication
+service2repli.network.port=7778
+service2repli.storage.path=/var/lib/taodb/service2_repli.db
+service2repli.master.host=127.0.0.1
+service2repli.master.port=7777
+```
 
 ## Build
 ```
 mvn clean package
 ```
 
-## Run Master
-```
-java \
-    -Dport=7777 \
-    -Dfile=mydata.db \
-    -cp target/tao-db-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.puddingspudding.taodb.TaoService
-```
 
-## Run Replication
-```
-java \
-    -Dport=7778 \
-    -Dfile=replicated_mydata.db \
-    -DmasterHost=127.0.0.1 \
-    -DmasterPort=7777 \
-    -cp target/tao-db-1.0-SNAPSHOT-jar-with-dependencies.jar com.github.puddingspudding.taodb.TaoReplicationService
-```
+[status]: https://github.com/puddingspudding/taoDB/tree/master/docs/status.png "taodb status"

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+java -cp /usr/lib/taodb/taodb.jar com.github.puddingspudding.taodb.CLI $*

@@ -39,16 +39,19 @@ public class IndexedProtobufFileStorage implements Storage {
         this.writeFileChannel = FileChannel.open(this.file, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         this.indexFileChannel = FileChannel.open(file, StandardOpenOption.READ);
 
-        System.out.print("Indexing...");
         updateIndex(true);
-        System.out.println("Done");
 
         for (int x = 0; x < READ_CHANNELS; x++) {
             readFileChannels.add(FileChannel.open(this.file, StandardOpenOption.READ));
         }
 
         Executors
-            .newSingleThreadScheduledExecutor()
+            .newSingleThreadScheduledExecutor(r -> {
+                Thread t = new Thread(r);
+                t.setDaemon(true);
+                t.setName("taodb.index.updater");
+                return t;
+            })
             .scheduleAtFixedRate(this::updateIndex, 1, 1, TimeUnit.SECONDS);
     }
 

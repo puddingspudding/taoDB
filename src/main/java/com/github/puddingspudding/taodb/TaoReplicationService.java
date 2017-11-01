@@ -7,8 +7,11 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.concurrent.Executors;
@@ -26,6 +29,21 @@ public class TaoReplicationService extends ReplicatedEventStoreServiceGrpc.Repli
 
         String replicationHost = System.getProperty("masterHost");
         int replicationPort = Integer.valueOf(System.getProperty("masterPort"));
+
+        String name = Optional.ofNullable(System.getProperty("name")).orElse("default");
+        Path pidFile = Paths.get("/tmp/taodb-" + name + ".pid");
+        long pid = ProcessHandle.current().pid();
+        Files.write(pidFile, String.valueOf(pid).getBytes(), StandardOpenOption.CREATE_NEW);
+
+        Runtime runtime = Runtime.getRuntime();
+        runtime.addShutdownHook(new Thread(() -> {
+            try {
+                Files.delete(pidFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }));
+
 
         TaoReplicationService service = new TaoReplicationService(replicationHost, replicationPort, file);
 
