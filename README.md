@@ -22,10 +22,10 @@ An event consists of an Id and data (arbitrary bytes). The Id is a combination o
 
 ## ToDo
 - Deployment
-  - Package
-  - ~Start/Stop~
-  - Configuration (in progress)
-  - Error Logging
+  - [ ] Package
+  - [x] Start/Stop
+  - [ ] Configuration (in progress)
+  - [ ] Error Logging
 
 
 # Run
@@ -63,7 +63,7 @@ service1.storage.path=/var/lib/taodb/service1.db
 service2.network.port=7777
 service2.storage.path=/var/lib/taodb/service2.db
 
-# Server 1 Replication
+# Service 1 Replication
 service1repli.network.port=6667
 service1repli.storage.path=/var/lib/taodb/service1_repli.db
 service1repli.master.host=127.0.0.1
