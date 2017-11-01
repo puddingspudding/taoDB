@@ -33,7 +33,7 @@ An event consists of an Id and data (arbitrary bytes). The Id is a combination o
 ```
 taodb status
 ```
-![status][status]
+![taodb status](https://github.com/puddingspudding/taoDB/tree/master/docs/status.png)
 
 ## Config
 ```
@@ -69,5 +69,3 @@ service2repli.master.port=7777
 mvn clean package
 ```
 
-
-[status]: https://github.com/puddingspudding/taoDB/tree/master/docs/status.png "taodb status"
