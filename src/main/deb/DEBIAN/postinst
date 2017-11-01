@@ -1,0 +1,2 @@
+adduser --no-create-home --system taodb
+chmod taodb /usr/lib/taodb /etc/taodb /usr/bin/taodb

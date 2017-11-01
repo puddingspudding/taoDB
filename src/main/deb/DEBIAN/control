@@ -1,0 +1,7 @@
+Package: taodb
+Section: java
+Priority: optional
+Maintainer: pudding
+Version: 0.1.0
+Architecture: all
+Description: Whoop Whoop
