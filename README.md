@@ -1,5 +1,6 @@
 # [WIP] TaoDB
 Database for [Event Sourcing](https://www.google.de/search?q=event+sourcing)
+[![Build Status](https://travis-ci.org/puddingspudding/taoDB.svg?branch=master)](https://travis-ci.org/puddingspudding/taoDB)
 ## Features
 - Append only / Immutable
 - Ordered Events
@@ -28,6 +29,7 @@ An event consists of an Id and data (arbitrary bytes). The Id is a combination o
   - [ ] Error Logging
 - [ ] Benchmarks
 - [ ] Examples
+- [ ] Tests
 
 
 # Run
