@@ -21,11 +21,13 @@ An event consists of an Id and data (arbitrary bytes). The Id is a combination o
 
 
 ## ToDo
-- Deployment
+- [ ] Deployment
   - [ ] Package
   - [x] Start/Stop
   - [ ] Configuration (in progress)
   - [ ] Error Logging
+- [ ] Benchmarks
+- [ ] Examples
 
 
 # Run
