@@ -36,7 +36,7 @@ $ taodb status
 ```
 
 ![taodb status]
-(https://github.com/puddingspudding/taoDB/tree/master/docs/status.png)
+(https://github.com/puddingspudding/taoDB/raw/master/docs/status.png)
 
 ## Start/Stop
 ```
