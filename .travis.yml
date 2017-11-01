@@ -7,8 +7,9 @@ services:
 script:
 - "./build-deb.sh"
 branches:
-  except:
-  - "/^debian\\/\\d/"
+    only:
+    - master
+    - /^v\d+(\.\d+)+$/
 deploy:
   provider: releases
   overwrite: true
