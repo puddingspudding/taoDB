@@ -30,10 +30,21 @@ An event consists of an Id and data (arbitrary bytes). The Id is a combination o
 
 # Run
 
+## Status
 ```
-taodb status
+$ taodb status
 ```
 ![taodb status](https://github.com/puddingspudding/taoDB/tree/master/docs/status.png)
+
+## Start/Stop
+```
+$ taodb start service1
+```
+```
+$ taodb stop service1
+```
+
+
 
 ## Config
 ```
