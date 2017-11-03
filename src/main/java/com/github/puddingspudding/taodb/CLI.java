@@ -24,7 +24,7 @@ public class CLI {
 
     public static void main(String[] args) throws Exception {
         Properties config = new Properties();
-        config.load(new FileReader(new File("taodb.config")));
+        config.load(new FileReader(new File(System.getProperty("config"))));
 
         String[] serviceNames = config.getProperty("taodb.services").split(",");
         String[] replicationServiceNames = config.getProperty("taodb.replication.services").split(",");
@@ -114,7 +114,7 @@ public class CLI {
                 + " -Dfile=" + config.getProperty(name + ".storage.path")
                 + " -Dname=" + name
                 + " -cp"
-                + " /Users/pudding/IdeaProjects/taodb/target/tao-db-1.0-SNAPSHOT-jar-with-dependencies.jar"
+                + " /usr/lib/taodb/taodb.jar"
                 + " com.github.puddingspudding.taodb.TaoService"
             ));
         }
@@ -127,8 +127,8 @@ public class CLI {
                 + " -DmasterPort=" + config.getProperty(name + ".master.port")
                 + " -Dname=" + name
                 + " -cp"
-                + " /Users/pudding/IdeaProjects/taodb/target/tao-db-1.0-SNAPSHOT-jar-with-dependencies.jar"
-                + " com.github.puddingspudding.taodb.TaoService"
+                + " /usr/lib/taodb/taodb.jar"
+                + " com.github.puddingspudding.taodb.TaoReplicationService"
             ));
         }
         return Optional.empty();

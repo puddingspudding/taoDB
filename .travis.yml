@@ -8,7 +8,6 @@ script:
 - "./build-deb.sh"
 branches:
     only:
-    - master
     - /^v\d+(\.\d+)+$/
 deploy:
   provider: releases

@@ -1,0 +1,3 @@
+addgroup --system taodb
+adduser --home /usr/lib/taodb --system --ingroup taodb taodb
+
