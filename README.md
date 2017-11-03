@@ -1,6 +1,13 @@
 # [WIP] TaoDB
 Database for [Event Sourcing](https://www.google.de/search?q=event+sourcing)
 [![Build Status](https://travis-ci.org/puddingspudding/taoDB.svg?branch=master)](https://travis-ci.org/puddingspudding/taoDB)
+
+## Install
+See [releases](https://github.com/puddingspudding/taoDB/releases)
+```
+$ sudo dpkg -i taodb.deb
+```
+
 ## Features
 - Append only / Immutable
 - Ordered Events
