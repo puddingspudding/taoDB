@@ -43,7 +43,11 @@ An event consists of an Id and data (arbitrary bytes). The Id is a combination o
 
 # Performance
 Tested on AWS EC2 t2.2xlarge (8 Cores, 32GB)
-1000 concurrent clients, 10ms interval, 1kb/event  => ø50-60K writes/s
+- 1000 concurrent clients
+- 10ms interval
+- 1024 bytes/event
+
+
 ![status](https://github.com/puddingspudding/taoDB/raw/master/docs/performance.png)
 
 # Run
