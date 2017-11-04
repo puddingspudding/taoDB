@@ -1,5 +1,6 @@
 # [WIP] TaoDB
 Database for [Event Sourcing](https://www.google.de/search?q=event+sourcing)
+
 [![Build Status](https://travis-ci.org/puddingspudding/taoDB.svg?branch=master)](https://travis-ci.org/puddingspudding/taoDB)
 
 ## Install
@@ -30,14 +31,20 @@ An event consists of an Id and data (arbitrary bytes). The Id is a combination o
 
 ## ToDo
 - [ ] Deployment
-  - [ ] Package
+  - [x] Package
   - [x] Start/Stop
-  - [ ] Configuration (in progress)
+  - [x] Configuration
   - [ ] Error Logging
-- [ ] Benchmarks
+- [x] Benchmarks
 - [ ] Examples
 - [ ] Tests
+- [ ] Monitoring / Dashboard
 
+
+# Performance
+Tested on AWS EC2 t2.2xlarge (8 Cores, 32GB)
+1000 concurrent clients, 10ms interval, 1kb/event  => ø50-60K writes/s
+![status](https://github.com/puddingspudding/taoDB/raw/master/docs/performance.png)
 
 # Run
 
@@ -85,10 +92,5 @@ service2repli.network.port=7778
 service2repli.storage.path=/var/lib/taodb/service2_repli.db
 service2repli.master.host=127.0.0.1
 service2repli.master.port=7777
-```
-
-## Build
-```
-mvn clean package
 ```
 
