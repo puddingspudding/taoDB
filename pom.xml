@@ -9,6 +9,7 @@
     <version>0.2.0</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Database for Event Sourcing (Eventstore)</description>
+    <url>https://github.com/puddingspudding/taodb</url>
 
     <properties>
         <maven.compiler.source>1.9</maven.compiler.source>
