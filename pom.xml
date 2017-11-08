@@ -7,6 +7,7 @@
     <groupId>com.github.puddingspudding</groupId>
     <artifactId>taodb</artifactId>
     <version>0.2.0</version>
+    <name>${project.groupId}:${project.artifactId}</name>
 
     <properties>
         <maven.compiler.source>1.9</maven.compiler.source>
