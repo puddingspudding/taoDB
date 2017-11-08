@@ -1,7 +1,5 @@
 package com.github.puddingspudding.taodb;
 
-import com.google.protobuf.BoolValue;
-import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
 
 import java.io.ByteArrayOutputStream;
@@ -11,19 +9,21 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Queue;
+import java.util.SortedMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.*;
 import java.util.function.Consumer;
 
 /**
  * IndexedProtobufFileStorage.
  */
-public class IndexedProtobufFileStorage implements Storage {
+class IndexedProtobufFileStorage implements Storage {
 
     private static final int READ_CHANNELS = 1000;
 
@@ -68,7 +68,7 @@ public class IndexedProtobufFileStorage implements Storage {
                 if (updateLatestEventId) {
                     this.latestEvenId = event.getId();
                 }
-                index.putIfAbsent(event.getId().getTimestamp().getSeconds(), pos);
+                index.putIfAbsent(EventIdUtil.getTimestamp(event.getId()), pos);
             }
         } catch (Exception e) {
             // do error stuff
@@ -79,6 +79,8 @@ public class IndexedProtobufFileStorage implements Storage {
     @Override
     public void add(Event event, Consumer<Event> onNext, Runnable onEnd, Consumer<Throwable> onError) {
         try {
+            EventId eventId = EventIdUtil.create();
+            event = event.toBuilder().setId(eventId).setData(event.getData()).build();
             long pos = this.writeFileChannel.position();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -87,7 +89,7 @@ public class IndexedProtobufFileStorage implements Storage {
                 ByteBuffer.wrap(baos.toByteArray())
             );
             this.latestEvenId = event.getId();
-            this.index.putIfAbsent(event.getId().getTimestamp().getSeconds(), pos);
+            this.index.putIfAbsent(EventIdUtil.getTimestamp(event.getId()), pos);
             onNext.accept(event);
             onEnd.run();
         } catch (Exception e) {
@@ -98,26 +100,17 @@ public class IndexedProtobufFileStorage implements Storage {
 
     @Override
     public void get(EventId eventId, Consumer<Event> onNext, Runnable onEnd, Consumer<Throwable> onError) {
-        FileChannel fileChannel = null;
-        while ((fileChannel = readFileChannels.poll()) == null) {
-            try {
-                System.out.println("no channel available. Sleeping...");
-                Thread.sleep(100);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        FileChannel fileChannel = getReadFileChannelOrWait();
 
         try {
-            long pos = Math.max(0, getPositionFromTimestamp(index, eventId.getTimestamp().getSeconds()));
+            long pos = Math.max(0, getPositionFromTimestamp(index, EventIdUtil.getTimestamp(eventId)));
             fileChannel.position(pos);
             long maxPos = fileChannel.size();
             InputStream inputStream = Channels.newInputStream(fileChannel);
             boolean found = false;
             while (fileChannel.position() < maxPos) {
                 Event event = Event.parseDelimitedFrom(inputStream);
-                if (event.getId().getUuid().equals(eventId.getUuid())) {
+                if (event.getId().equals(eventId)) {
                     found = true;
                 } else if (found) {
                     onNext.accept(event);
@@ -133,16 +126,48 @@ public class IndexedProtobufFileStorage implements Storage {
     }
 
     @Override
-    public void get(Timestamp timestamp, Consumer<Event> onNext, Runnable onEnd, Consumer<Throwable> onError) {
+    public void get(EventId eventId, Consumer<Event> onNext, Consumer<Throwable> onError) {
+        FileChannel fileChannel = getReadFileChannelOrWait();
+
+        try {
+            long pos = Math.max(0, getPositionFromTimestamp(index, EventIdUtil.getTimestamp(eventId)));
+            fileChannel.position(pos);
+            long maxPos = fileChannel.size();
+            InputStream inputStream = Channels.newInputStream(fileChannel);
+            while (fileChannel.position() < maxPos) {
+                Event event = Event.parseDelimitedFrom(inputStream);
+                if (event.getId().equals(eventId)) {
+                    onNext.accept(event);
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            onError.accept(e);
+        } finally {
+            this.readFileChannels.offer(fileChannel);
+        }
+        onError.accept(new RuntimeException("event not found"));
+    }
+
+    private FileChannel getReadFileChannelOrWait() {
         FileChannel fileChannel = null;
         while ((fileChannel = readFileChannels.poll()) == null) {
             try {
                 System.out.println("no channel available. Sleeping...");
-                Thread.sleep(100);
+                Thread.sleep(10);
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        return fileChannel;
+    }
+
+    @Override
+    public void get(Timestamp timestamp, Consumer<Event> onNext, Runnable onEnd, Consumer<Throwable> onError) {
+        FileChannel fileChannel = getReadFileChannelOrWait();
+
         try {
             long pos = getPositionFromTimestamp(index, timestamp.getSeconds());
             if (pos != -1) {
@@ -151,7 +176,7 @@ public class IndexedProtobufFileStorage implements Storage {
                 InputStream inputStream = Channels.newInputStream(fileChannel);
                 while (fileChannel.position() < maxPos) {
                     Event event = Event.parseDelimitedFrom(inputStream);
-                    if (event.getId().getTimestamp().getSeconds() >= timestamp.getSeconds()) {
+                    if (EventIdUtil.getTimestamp(event.getId()) >= timestamp.getSeconds()) {
                         onNext.accept(event);
                     }
                 }

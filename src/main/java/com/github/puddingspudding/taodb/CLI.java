@@ -1,6 +1,5 @@
 package com.github.puddingspudding.taodb;
 
-import io.grpc.internal.IoUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
@@ -13,8 +12,6 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.OptionalLong;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**

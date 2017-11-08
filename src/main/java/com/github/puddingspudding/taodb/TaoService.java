@@ -1,15 +1,15 @@
 package com.github.puddingspudding.taodb;
 
-import com.google.protobuf.Empty;
 import com.google.protobuf.Timestamp;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Optional;
 
 /**
@@ -67,14 +67,20 @@ public class TaoService extends EventStoreServiceGrpc.EventStoreServiceImplBase 
     }
 
     @Override
-    public void getById(EventId eventId, StreamObserver<Event> responseObserver) {
+    public void getSinceId(EventId eventId, StreamObserver<Event> responseObserver) {
         this.storage.get(eventId, responseObserver::onNext, responseObserver::onCompleted, responseObserver::onError);
     }
 
     @Override
-    public void getByTimestamp(Timestamp timestamp, StreamObserver<Event> responseObserver) {
+    public void getSinceTimestamp(Timestamp timestamp, StreamObserver<Event> responseObserver) {
         this.storage.get(timestamp, responseObserver::onNext, responseObserver::onCompleted, responseObserver::onError);
     }
 
-
+    @Override
+    public void get(EventId eventId, StreamObserver<Event> responseObserver) {
+        this.storage.get(eventId, event -> {
+            responseObserver.onNext(event);
+            responseObserver.onCompleted();
+        }, responseObserver::onError);
+    }
 }

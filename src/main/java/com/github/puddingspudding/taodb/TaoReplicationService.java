@@ -85,8 +85,8 @@ public class TaoReplicationService extends ReplicatedEventStoreServiceGrpc.Repli
             Optional<EventId> eventId = storage.latestEventId();
 
             Iterator<Event> events = eventId
-                .map(this.stub::getById)
-                .orElseGet(() -> this.stub.getByTimestamp(Timestamp.getDefaultInstance()));
+                .map(this.stub::getSinceId)
+                .orElseGet(() -> this.stub.getSinceTimestamp(Timestamp.getDefaultInstance()));
             while (events.hasNext()) {
                 storage.add(
                     events.next(),
@@ -103,7 +103,7 @@ public class TaoReplicationService extends ReplicatedEventStoreServiceGrpc.Repli
 
 
     @Override
-    public void getById(EventId eventId, StreamObserver<Event> responseObserver) {
+    public void getSinceId(EventId eventId, StreamObserver<Event> responseObserver) {
         this.storage.get(
             eventId,
             responseObserver::onNext,
@@ -113,7 +113,7 @@ public class TaoReplicationService extends ReplicatedEventStoreServiceGrpc.Repli
     }
 
     @Override
-    public void getByTimestamp(Timestamp timestamp, StreamObserver<Event> responseObserver) {
+    public void getSinceTimestamp(Timestamp timestamp, StreamObserver<Event> responseObserver) {
         this.storage.get(
             timestamp,
             responseObserver::onNext,
@@ -121,4 +121,13 @@ public class TaoReplicationService extends ReplicatedEventStoreServiceGrpc.Repli
             responseObserver::onError
         );
     }
+
+    @Override
+    public void get(EventId eventId, StreamObserver<Event> responseObserver) {
+        this.storage.get(eventId, event -> {
+            responseObserver.onNext(event);
+            responseObserver.onCompleted();
+        }, responseObserver::onError);
+    }
+
 }

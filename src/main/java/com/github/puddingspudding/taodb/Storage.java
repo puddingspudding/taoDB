@@ -20,6 +20,18 @@ interface Storage {
 
     void get(Timestamp timestamp, Consumer<Event> onNext, Runnable onEnd, Consumer<Throwable> onError);
 
+    /**
+     * Returns single event for given event id.
+     *
+     * @param eventId event id
+     * @param onNext called if event was found
+     * @param onError called if event not found or any other error
+     */
+    void get(EventId eventId, Consumer<Event> onNext, Consumer<Throwable> onError);
+
+    /**
+     * @return latest written event id.
+     */
     Optional<EventId> latestEventId();
 
 }

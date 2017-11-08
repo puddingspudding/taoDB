@@ -12,19 +12,28 @@ message Event {
 }
 
 message EventId {
-    string uuid = 1;
-    google.protobuf.Timestamp timestamp = 2;
+    bytes id = 1;
 }
 
 service EventStoreService {
+    /* Adds new evnts. Returns event with event id */
     rpc add(Event) returns (Event);
-    rpc getById(EventId) returns (stream Event);
-    rpc getByTimestamp(google.protobuf.Timestamp) returns (stream Event);
+
+    /* Returns all events since given event id */
+    rpc getSinceId(EventId) returns (stream Event);
+
+    /* Returns all events since given timestamp */
+    rpc getSinceTimestamp(google.protobuf.Timestamp) returns (stream Event);
+
+    /* Returns single event */
+    rpc get(EventId) returns (Event);
 }
 
 /* The ReplicatedEventStoreService provides the same interface as EventStoreService
  * except for add() to ensure read-only access */
 service ReplicatedEventStoreService {
     rpc getById(EventId) returns (stream Event);
-    rpc getByTimestamp(google.protobuf.Timestamp) returns (stream Event);
+    rpc getSinceId(EventId) returns (stream Event);
+    rpc getSinceTimestamp(google.protobuf.Timestamp) returns (stream Event);
+    rpc get(EventId) returns (Event);
 }
