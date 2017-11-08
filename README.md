@@ -9,6 +9,15 @@ See [releases](https://github.com/puddingspudding/taoDB/releases)
 $ sudo dpkg -i taodb.deb
 ```
 
+## Maven
+```
+<dependency>
+    <groupId>com.github.puddingspudding</groupId>
+    <artifactId>taodb</artifactId>
+    <version>0.2.0</version>
+</dependency>
+```
+
 ## Features
 - Append only / Immutable
 - Ordered Events
@@ -97,4 +106,3 @@ service2repli.storage.path=/var/lib/taodb/service2_repli.db
 service2repli.master.host=127.0.0.1
 service2repli.master.port=7777
 ```
-
